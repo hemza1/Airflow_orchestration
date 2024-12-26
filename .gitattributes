@@ -1,0 +1,5 @@
+# Ensure text files use LF for line endings
+* text eol=lf
+
+# Prevent log files from being converted
+*.log -text

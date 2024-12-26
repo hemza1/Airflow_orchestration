@@ -1,0 +1,5 @@
+# Ignore Airflow logs
+Airflow/logs/**/*.log
+
+# Ignore database files
+init/db/sales_ecom.db

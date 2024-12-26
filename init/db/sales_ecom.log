@@ -1,0 +1,21 @@
+2024-12-26 00:56:41,910 - INFO - Connecting to the DuckDB database: sales_ecom.db
+2024-12-26 00:56:41,936 - INFO - Successfully connected to the database.
+2024-12-26 00:56:41,951 - INFO - Schema 'raw_layer' created or already exists.
+2024-12-26 00:56:41,953 - INFO - Schema 'refined_layer' created or already exists.
+2024-12-26 00:56:41,955 - INFO - Schema 'reporting_layer' created or already exists.
+2024-12-26 00:56:41,962 - INFO - Table 'orders' created successfully in schema 'raw_layer'.
+2024-12-26 00:56:42,101 - INFO - Database connection closed.
+2024-12-26 00:57:13,657 - INFO - Connecting to the DuckDB database: sales_ecom.db
+2024-12-26 00:57:13,685 - INFO - Successfully connected to the database.
+2024-12-26 00:57:13,686 - INFO - Schema 'raw_layer' created or already exists.
+2024-12-26 00:57:13,687 - INFO - Schema 'refined_layer' created or already exists.
+2024-12-26 00:57:13,688 - INFO - Schema 'reporting_layer' created or already exists.
+2024-12-26 00:57:13,689 - INFO - Table 'orders' created successfully in schema 'raw_layer'.
+2024-12-26 00:57:13,815 - INFO - Database connection closed.
+2024-12-26 00:58:32,452 - INFO - Connecting to the DuckDB database: sales_ecom.db
+2024-12-26 00:58:32,476 - INFO - Successfully connected to the database.
+2024-12-26 00:58:32,477 - INFO - Schema 'raw_layer' created or already exists.
+2024-12-26 00:58:32,478 - INFO - Schema 'refined_layer' created or already exists.
+2024-12-26 00:58:32,479 - INFO - Schema 'reporting_layer' created or already exists.
+2024-12-26 00:58:32,480 - INFO - Table 'sales_ecom' created successfully in schema 'raw_layer'.
+2024-12-26 00:58:32,590 - ERROR - An error occurred: Catalog Error: Table with name SCHEMAS does not exist!
