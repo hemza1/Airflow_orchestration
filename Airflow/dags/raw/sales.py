@@ -1,19 +1,18 @@
-##### contains raw traitement + fetching from API using the get link 
-## setting data to dictionnary but why ? parametre orient 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 import logging
 import requests
 import duckdb
+import pandas as pd
+from io import StringIO
 
 # API and file details
 API_URL = "https://my.api.mockaroo.com/sales_ecom"
 API_KEY = "d805bc00"
-DUCKDB_FILE = "C:/Users/hp/Downloads/data_eng/init/db/sales_ecom.db"
+DUCKDB_FILE = "db/sales_ecom.db"
 DUCKDB_TABLE = "raw_layer.sales_ecom"
 CSV_FILE_PATH = "/tmp/sales_ecom.csv"
-
 
 # Configure logging
 logging.basicConfig(
@@ -22,9 +21,10 @@ logging.basicConfig(
 )
 
 # Fetch CSV data from the API and save it locally
-def fetch_csv_data_from_api(**kargs):
+def fetch_csv_data_from_api(**kwargs):
     """
     Fetch CSV data from the API and return it as a list of dictionaries.
+    This data is **pushed** to XCom automatically when returned.
     """
     try:
         headers = {"X-API-Key": API_KEY}
@@ -40,6 +40,8 @@ def fetch_csv_data_from_api(**kargs):
             # Convert the DataFrame to a list of dictionaries
             data_dicts = df.to_dict(orient='records')
             logging.debug(f"Fetched data: {data_dicts}")
+
+            # Return data, which will be pushed to XCom
             return data_dicts
         else:
             logging.error(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}")
@@ -48,12 +50,21 @@ def fetch_csv_data_from_api(**kargs):
         logging.error(f"Error while fetching data from API: {e}")
         raise
 
-# insert the fetched CSV data into DuckDB
-def insert_records_to_duckdb(**kargs):
+# Insert the fetched CSV data into DuckDB
+def insert_records_to_duckdb(**kwargs):
     """
     Insert a list of dictionaries into the DuckDB table using parameterized queries.
+    This function **pulls** data from XCom using task_instance.xcom_pull()
     """
     try:
+        # Pull the data from XCom
+        task_instance = kwargs['ti']
+        data_dicts = task_instance.xcom_pull(task_ids='fetch_csv_data')
+
+        # Check if data exists
+        if not data_dicts:
+            raise ValueError("No data fetched, aborting insertion.")
+
         # Connect to DuckDB
         conn = duckdb.connect(DUCKDB_FILE)
         logging.info(f"Connected to DuckDB file: {DUCKDB_FILE}")
@@ -90,7 +101,7 @@ with DAG(
     default_args={"retries": 2},
     description="Fetch sales data from API and store into DuckDB",
     start_date=datetime(2022, 12, 1),
-    schedule_interval='@hourly',       # Adjust the schedule as needed
+    schedule_interval='* * * * *',
     catchup=False
 ) as dag:
 
