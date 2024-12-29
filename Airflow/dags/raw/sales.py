@@ -73,18 +73,19 @@ def insert_records_to_duckdb(**kwargs):
         insert_query = f"""
         INSERT INTO raw_layer.sales_ecom (
             OrderID, Quantity, OrderDate, OrderStatus, PaymentMethod,
-            CustomerID, CustomerName, Country, Email, ProductID, ProductName, PricePerUnit
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            CustomerID, CustomerName, Country, Email, ProductID, ProductName, PricePerUnit , Ingestion_Time
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
         # Insert records using parameterized queries
         for record in data_dicts:
+            Ingestion_Time = datetime.now()
             conn.execute(
                 insert_query, 
                 [
                     record['OrderID'], record['Quantity'], record['OrderDate'], record['OrderStatus'],
                     record['PaymentMethod'], record['CustomerID'], record['CustomerName'], record['Country'],
-                    record['Email'], record['ProductID'], record['ProductName'], record['PricePerUnit']
+                    record['Email'], record['ProductID'], record['ProductName'], record['PricePerUnit'],Ingestion_Time
                 ]
             )
         logging.info(f"Successfully inserted {len(data_dicts)} records into {DUCKDB_TABLE}.")

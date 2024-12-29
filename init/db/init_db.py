@@ -51,12 +51,16 @@ def init_db():
         """
         conn.execute(create_table_query)
         logging.info("Table 'sales_ecom' created successfully in schema 'raw_layer'.")
-
+        conn.execute("""ALTER TABLE raw_layer.sales_ecom 
+        ADD COLUMN Ingestion_Time TIMESTAMP;
+        """)
+        logging.info("Successfully created raw_layer")
         # Verify schema and table creation
         schemas = conn.execute("SHOW SCHEMAS").fetchall()
         tables = conn.execute("SHOW TABLES FROM raw_layer").fetchall()
         logging.info(f"Schemas in database: {schemas}")
         logging.info(f"Tables in 'raw_layer' schema: {tables}")
+        
 
         # Close the database connection
         conn.close()
