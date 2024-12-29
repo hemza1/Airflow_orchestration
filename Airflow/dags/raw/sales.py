@@ -102,7 +102,7 @@ with DAG(
     default_args={"retries": 2},
     description="Fetch sales data from API and store into DuckDB",
     start_date=datetime(2022, 12, 1),
-    schedule_interval='* * * * *',
+    schedule_interval='* * * * *',  # Every minute
     catchup=False
 ) as dag:
 
